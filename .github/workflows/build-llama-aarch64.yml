@@ -44,8 +44,13 @@ jobs:
           mkdir -p out
           cp llama.cpp/build/bin/llama-server out/
           cp llama.cpp/build/bin/llama-cli out/
+
+          find llama.cpp/build -type f \( -name "*.so" -o -name "*.so.*" \) -exec cp -a {} out/ \; || true
+
           aarch64-linux-gnu-strip out/llama-server || true
           aarch64-linux-gnu-strip out/llama-cli || true
+          aarch64-linux-gnu-strip out/*.so* || true
+
           tar -C out -czf llama-cpp-linux-aarch64.tar.gz .
 
       - name: Upload artifact
